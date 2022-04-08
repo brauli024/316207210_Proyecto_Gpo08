@@ -13,9 +13,40 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de origen\Shaders">
+      <UniqueIdentifier>{75e19e6f-ae7c-484e-8910-9fa9d0c6efca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MainPrueba.cpp">
+    <None Include="Shaders\lamp.frag">
+      <Filter>Archivos de origen\Shaders</Filter>
+    </None>
+    <None Include="Shaders\lamp.vs">
+      <Filter>Archivos de origen\Shaders</Filter>
+    </None>
+    <None Include="Shaders\lighting.frag">
+      <Filter>Archivos de origen\Shaders</Filter>
+    </None>
+    <None Include="Shaders\lighting.vs">
+      <Filter>Archivos de origen\Shaders</Filter>
+    </None>
+    <None Include="Shaders\modelLoading.frag">
+      <Filter>Archivos de origen\Shaders</Filter>
+    </None>
+    <None Include="Shaders\modelLoading.vs">
+      <Filter>Archivos de origen\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stb_image.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ProyectoFinal.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
