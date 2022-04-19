@@ -1,4 +1,77 @@
-﻿LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
+﻿  ProyectoFinal.cpp
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(267,30): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(301,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(302,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(303,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(314,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(315,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(316,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(327,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(328,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(329,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(340,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(341,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(342,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(421,100): warning C4305: 'argumento': truncamiento de 'double' a 'GLfloat'
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(239,38): warning C4101: 'nrChannels': variable local sin referencia
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(239,9): warning C4101: 'textureWidth': variable local sin referencia
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(241,20): warning C4101: 'image': variable local sin referencia
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(239,23): warning C4101: 'textureHeight': variable local sin referencia
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(591,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(592,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(596,21): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(597,21): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(599,13): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(600,13): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
 soil2-debug.lib(etc1_utils.obj) : warning LNK4099: no se encontró PDB 'soil2-debug.pdb' con 'soil2-debug.lib(etc1_utils.obj)' o en 'C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\Debug\soil2-debug.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 soil2-debug.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'soil2-debug.pdb' con 'soil2-debug.lib(image_DXT.obj)' o en 'C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\Debug\soil2-debug.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 soil2-debug.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'soil2-debug.pdb' con 'soil2-debug.lib(image_helper.obj)' o en 'C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\Debug\soil2-debug.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
