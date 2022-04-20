@@ -50,17 +50,13 @@ glm::vec3 SpotLightPos(2.5f, 0.0f, -2.5f);
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    glm::vec3(0.0f, 0.0f, 0.0f),
-    glm::vec3(0.0f, 0.0f, -5.0f),
-    glm::vec3(5.0f, 0.0f, -5.0f),
-    glm::vec3(5.0f, 0.0f, 0.0f)
+    glm::vec3(-6.0f, 2.0f, 1.0f)
 };
 
 //Others
 glm::vec3 Light1 = glm::vec3(0);
-glm::vec3 Light2 = glm::vec3(1);
-glm::vec3 Light3 = glm::vec3(0);
-glm::vec3 Light4 = glm::vec3(0);
+glm::vec3 alfa1 = glm::vec3(1);
+glm::vec3 alfa2 = glm::vec3(1);
 float rot = 0.0f;
 bool active;
 bool anim = false;
@@ -126,7 +122,9 @@ int main( )
 
     // Load models
 
-    Model control((char*)"Models/Control/Control.obj");
+    Model Control((char*)"Models/Control/Control.obj");
+    Model Sofa((char*)"Models/Sofa/Sofa.obj");
+    Model Mordecai((char*)"Models/Mordecai/Mordecai.obj");
     Model BensonCuerpo((char*)"Models/Benson/Benson_Cuerpo.obj");
     Model BensonCabeza((char*)"Models/Benson/Benson_Cabeza.obj");
     Model BensonChicles((char*)"Models/Benson/Benson_Chicles.obj");
@@ -293,61 +291,17 @@ int main( )
         glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"), 0.5f, 0.5f, 0.5f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.5f, 0.5f, 0.5f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"), 1.0f, 1.0f, 1.0f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"), 0.5f, 0.5f, 0.5f);
 
 
         // Point light Benson
-        glm::vec3 lightColor;
-        lightColor.x = abs(sin(glfwGetTime() * Light1.x));
-        lightColor.y = abs(sin(glfwGetTime() * Light1.y));
-        lightColor.z = sin(glfwGetTime() * Light1.z);
-
         glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].position"), pointLightPositions[0].x, pointLightPositions[0].y, pointLightPositions[0].z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].ambient"), Light1.x, Light1.y, Light1.z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].diffuse"), Light1.x, Light1.y, Light1.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].specular"), 0.1f, 0.1f, 0.1f);
         glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].linear"), 0.045f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 0.0075f);
-
-        // Point light 2
-        lightColor.x = abs(sin(glfwGetTime() * Light2.x));
-        lightColor.y = abs(sin(glfwGetTime() * Light2.y));
-        lightColor.z = sin(glfwGetTime() * Light2.z);
-
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].position"), pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].ambient"), lightColor.x, lightColor.y, lightColor.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].diffuse"), lightColor.x, lightColor.y, lightColor.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].specular"), 1.0f, 1.0f, 1.0f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].linear"), 0.7f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].quadratic"), 1.8f);
-
-        // Point light 3
-        lightColor.x = abs(sin(glfwGetTime() * Light3.x));
-        lightColor.y = abs(sin(glfwGetTime() * Light3.y));
-        lightColor.z = sin(glfwGetTime() * Light3.z);
-
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].position"), pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].ambient"), lightColor.x, lightColor.y, lightColor.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].diffuse"), lightColor.x, lightColor.y, lightColor.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].specular"), 1.0f, 1.0f, 1.0f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[2].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[2].linear"), 0.7f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[2].quadratic"), 1.8f);
-
-        // Point light 4
-        lightColor.x = abs(sin(glfwGetTime() * Light4.x));
-        lightColor.y = abs(sin(glfwGetTime() * Light4.y));
-        lightColor.z = sin(glfwGetTime() * Light4.z);
-
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].position"), pointLightPositions[3].x, pointLightPositions[3].y, pointLightPositions[3].z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].ambient"), lightColor.x, lightColor.y, lightColor.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].diffuse"), lightColor.x, lightColor.y, lightColor.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].specular"), 1.0f, 1.0f, 1.0f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[3].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[3].linear"), 0.7f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[3].quadratic"), 1.8f);
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].linear"), 0.7f);
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 1.8f);
 
         // SpotLight
         glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), SpotLightPos.x, SpotLightPos.y, SpotLightPos.z);
@@ -377,30 +331,44 @@ int main( )
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 
-        //------------------------------------------------MODEL SHADER------------------------------------------------
-
-
-        /*shader.Use();
-
-        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));*/
-
-        // Draw the loaded model
         glm::mat4 model(1);
 
-        //Control
+
+        //Sofa
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(5.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-rot), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
-        control.Draw(lightingShader);
+        Sofa.Draw(lightingShader);
 
         //Benson
         model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-6.0f, 0.0f, 1.0f));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         BensonCuerpo.Draw(lightingShader);
+
+        //Mordecai
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.1f, 0.1f, 0.1f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 1.0f, 1.0f, 1.0f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.2f, 0.2f, 0.2f);
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Mordecai.Draw(lightingShader);
+
+        //Control
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.1f, 0.1f, 0.1f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 1.0f, 1.0f, 1.0f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 1.0f, 1.0f, 1.0f);
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(0.0f, 1.0f, 2.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Control.Draw(lightingShader);
+
 
 
         //Trabajando canal alfa
@@ -409,16 +377,20 @@ int main( )
 
         //Chicles Benson
         model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-6.0f, 0.0f, 1.0f));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
-        glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), Light2.x, Light2.y, Light2.z, 1.0);
+        glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), alfa1.x, alfa1.y, alfa1.z, 1.0);
         BensonChicles.Draw(lightingShader);
 
         //Cabeza Benson
         model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-6.0f, 0.0f, 1.0f));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
-        glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), 1.0, 1.0, 1.0, 0.65);
+        glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), alfa2.x, alfa2.y, alfa2.z, 0.5);
         BensonCabeza.Draw(lightingShader);
 
         glDisable(GL_BLEND);   //Desactiva el canal alfa 
@@ -468,6 +440,26 @@ int main( )
 
         glBindVertexArray(0);
 
+
+        //------------------------------------------------MODEL SHADER------------------------------------------------
+
+
+        //shader.Use();
+
+        //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+
+        //// Draw the loaded model
+
+        ////Control
+        //model = glm::mat4(1);
+        //model = glm::translate(model, glm::vec3(10.0f, 0.0f, 0.0f));
+        ////model = glm::rotate(model, glm::radians(-rot), glm::vec3(1.0f, 0.0f, 0.0f));
+        //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        //Control.Draw(shader);
+
+
+        glBindVertexArray(0);
 
         // Swap the screen buffers
         glfwSwapBuffers(window);
@@ -573,12 +565,14 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         if (active)
         {
             Light1 = glm::vec3(1.0f, 0.0f, 0.0f);
-            Light2 = glm::vec3(1.0f, 0.0f, 0.0f);
+            alfa1 = glm::vec3(1.0f, 0.0f, 0.0f);
+            alfa2 = glm::vec3(1.0f, 0.0f, 0.0f);
         }
         else
         {
-            Light1 = glm::vec3(0);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
-            Light2 = glm::vec3(1);
+            Light1 = glm::vec3(0);
+            alfa1 = glm::vec3(1);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
+            alfa2 = glm::vec3(1);
         }
     }
 

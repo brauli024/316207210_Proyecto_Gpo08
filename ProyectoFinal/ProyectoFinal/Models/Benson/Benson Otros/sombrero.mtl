@@ -1,0 +1,69 @@
+newmtl Material_001
+illum 4
+Kd 0.63 0.29 0.64
+Ka 0.20 0.20 0.20
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 20.00
+newmtl Material_002
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.20 0.20 0.20
+Tf 1.00 1.00 1.00
+map_Kd Material.002_baseColor.jpg
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 20.00
+newmtl Material_003
+illum 4
+Kd 0.14 0.14 0.14
+Ka 0.20 0.20 0.20
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 20.00
+newmtl Material_009
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.20 0.20 0.20
+Tf 1.00 1.00 1.00
+map_Kd extremidades.png
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 20.00
+newmtl Material_011
+illum 4
+Kd 0.34 0.34 0.34
+Ka 0.20 0.20 0.20
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 20.00
+newmtl lambert3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd cuerpo_sombrero.png
+Ni 1.00
+newmtl phong1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd cabeza.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks cabeza_Specular.png
+Ns 18.00
+newmtl phong2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd cuerpo_sombrero.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks cuerpo_Specular.png
+Ns 18.00
