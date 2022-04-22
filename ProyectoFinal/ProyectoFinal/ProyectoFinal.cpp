@@ -126,6 +126,7 @@ int main( )
     Model Sofa((char*)"Models/Sofa/Sofa.obj");
     Model MesaConsola((char*)"Models/Mesa_Consola/Mesa.obj");
     Model Consola((char*)"Models/Consola/Consola.obj");
+    Model MesaTV((char*)"Models/Mesa_TV/Mesa.obj");
     Model Mordecai((char*)"Models/Mordecai/Mordecai.obj");
     Model BensonCuerpo((char*)"Models/Benson/Benson_Cuerpo.obj");
     Model BensonCabeza((char*)"Models/Benson/Benson_Cabeza.obj");
@@ -345,18 +346,25 @@ int main( )
 
         //Mesa Consola
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 2.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 2.3f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         MesaConsola.Draw(lightingShader);
 
         //Consola
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.8f, 0.652f, 2.3f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.652f, 2.5f));
         model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Consola.Draw(lightingShader);
+
+        //Mesa TV
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        MesaTV.Draw(lightingShader);
 
         //Benson
         model = glm::mat4(1);
