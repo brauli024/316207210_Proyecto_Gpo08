@@ -389,7 +389,7 @@ int main( )
         glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 1.0f, 1.0f, 1.0f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 1.0f, 1.0f, 1.0f);
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 1.0f, 2.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.66f, 1.8f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Control.Draw(lightingShader);
