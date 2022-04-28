@@ -50,15 +50,20 @@ glm::vec3 SpotLightPos(2.5f, 0.0f, -2.5f);
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    glm::vec3(-6.0f, 2.0f, 1.0f)
+    glm::vec3(-6.0f, 2.0f, 1.0f),
+    glm::vec3(0.0f, 1.6f, 4.35f)
 };
 
 //Others
 glm::vec3 Light1 = glm::vec3(0);
+glm::vec3 Light2 = glm::vec3(0);
 glm::vec3 alfa1 = glm::vec3(1);
 glm::vec3 alfa2 = glm::vec3(1);
+glm::vec3 enciende_TV = glm::vec3(0);
+glm::vec3 apaga_TV = glm::vec3(1);
 float rot = 0.0f;
 bool active;
+bool active2;
 bool anim = false;
 bool anim2 = false;
 bool anim3 = false;
@@ -127,6 +132,8 @@ int main( )
     Model MesaConsola((char*)"Models/Mesa_Consola/Mesa.obj");
     Model Consola((char*)"Models/Consola/Consola.obj");
     Model MesaTV((char*)"Models/Mesa_TV/Mesa.obj");
+    Model TV_encendida((char*)"Models/TV/TV_Encendida.obj");
+    Model TV_apagada((char*)"Models/TV/TV_apagada.obj");
     Model Mordecai((char*)"Models/Mordecai/Mordecai.obj");
     Model BensonCuerpo((char*)"Models/Benson/Benson_Cuerpo.obj");
     Model BensonCabeza((char*)"Models/Benson/Benson_Cabeza.obj");
@@ -306,6 +313,15 @@ int main( )
         glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].linear"), 0.7f);
         glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 1.8f);
 
+        // Point light TV
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].position"), pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].ambient"), Light2.x, Light2.y, Light2.z);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].diffuse"), Light2.x, Light2.y, Light2.z);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].specular"), 0.05f, 0.05f, 0.05f);
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].constant"), 1.0f);
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].linear"), 0.7f);
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].quadratic"), 1.8f);
+
         // SpotLight
         glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), SpotLightPos.x, SpotLightPos.y, SpotLightPos.z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.direction"), SpotLightDir.x, SpotLightDir.y, SpotLightDir.z);
@@ -365,6 +381,24 @@ int main( )
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         MesaTV.Draw(lightingShader);
+
+        //TV Apagada
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(0.0f, 0.83f, 4.8f));
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(apaga_TV.x, apaga_TV.y, apaga_TV.z));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        TV_apagada.Draw(lightingShader);
+
+        //TV Encendida
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(0.0f, 0.83f, 4.8f));
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(enciende_TV.x, enciende_TV.y, enciende_TV.z));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        TV_encendida.Draw(lightingShader);
 
         //Benson
         model = glm::mat4(1);
@@ -429,32 +463,32 @@ int main( )
         //------------------------------------------------LAMP SHADER------------------------------------------------
 
 
-        // Also draw the lamp object, again binding the appropriate shader
-        lampShader.Use();
-        // Get location objects for the matrices on the lamp shader (these could be different on a different shader)
-        modelLoc = glGetUniformLocation(lampShader.Program, "model");
-        viewLoc = glGetUniformLocation(lampShader.Program, "view");
-        projLoc = glGetUniformLocation(lampShader.Program, "projection");
+        //// Also draw the lamp object, again binding the appropriate shader
+        //lampShader.Use();
+        //// Get location objects for the matrices on the lamp shader (these could be different on a different shader)
+        //modelLoc = glGetUniformLocation(lampShader.Program, "model");
+        //viewLoc = glGetUniformLocation(lampShader.Program, "view");
+        //projLoc = glGetUniformLocation(lampShader.Program, "projection");
 
-        // Set matrices
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        //// Set matrices
+        //glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        //glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 
-        model = glm::mat4(1);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        // Draw the light object (using light's vertex attributes)
-        for (GLuint i = 0; i < 1; i++)
-        {
-            model = glm::mat4(1);
-            model = glm::translate(model, pointLightPositions[i]);
-            model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            glBindVertexArray(VAO);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        //model = glm::mat4(1);
+        //model = glm::translate(model, lightPos);
+        //model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        //// Draw the light object (using light's vertex attributes)
+        //for (GLuint i = 0; i < 2; i++)
+        //{
+        //    model = glm::mat4(1);
+        //    model = glm::translate(model, pointLightPositions[i]);
+        //    model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+        //    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        //    glBindVertexArray(VAO);
+        //    glDrawArrays(GL_TRIANGLES, 0, 36);
+        //}
 
         //model = glm::mat4(1);
         //model = glm::translate(model, SpotLightPos);
@@ -580,6 +614,23 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     {
         anim2 = true;
         anim = false;
+    }
+
+    if (keys[GLFW_KEY_P])
+    {
+        active2 = !active2;
+        if (active2)
+        {
+            enciende_TV = glm::vec3(1);
+            apaga_TV = glm::vec3(0);
+            Light2 = glm::vec3(1);
+        }
+        else
+        {
+            enciende_TV = glm::vec3(0);
+            apaga_TV = glm::vec3(1);
+            Light2 = glm::vec3(0);
+        }
     }
 
     //Benson enojado
