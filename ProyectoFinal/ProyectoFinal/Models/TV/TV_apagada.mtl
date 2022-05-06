@@ -1,37 +1,24 @@
-newmtl TV_apagada_TV_TV_phong4SG1
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd pantalla_apagada.png
-Ni 1.00
-Ks 0.00 0.00 0.00
-map_Ks pantalla_specular.png
-Ns 18.00
-newmtl TV_apagada_TV_lambert3SG1
+newmtl lambert2SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd TV.png
 Ni 1.00
-Ks 0.50 0.50 0.50
-Ns 18.00
-newmtl TV_apagada_TV_lambert4SG1
+newmtl lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd botones.png
 Ni 1.00
-Ks 0.50 0.50 0.50
-Ns 18.00
-newmtl TV_apagada_lambert3SG
+newmtl phong2SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-map_Kd TV.png
+map_Kd pantalla_apagada.png
 Ni 1.00
 Ks 0.50 0.50 0.50
+map_Ks pantalla_specular.png
 Ns 18.00
