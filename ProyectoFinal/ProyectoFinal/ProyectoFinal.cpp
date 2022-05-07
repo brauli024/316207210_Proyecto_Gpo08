@@ -135,6 +135,7 @@ int main( )
     Model TV_encendida((char*)"Models/TV/TV_Encendida.obj");
     Model TV_apagada((char*)"Models/TV/TV_apagada.obj");
     Model Mordecai((char*)"Models/Mordecai/Mordecai.obj");
+    Model Rigby((char*)"Models/Rigby/Rigby.obj");
     Model BensonCuerpo((char*)"Models/Benson/Benson_Cuerpo.obj");
     Model BensonCabeza((char*)"Models/Benson/Benson_Cabeza.obj");
     Model BensonChicles((char*)"Models/Benson/Benson_Chicles.obj");
@@ -417,6 +418,17 @@ int main( )
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Mordecai.Draw(lightingShader);
+
+        //Rigby
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.1f, 0.1f, 0.1f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 1.0f, 1.0f, 1.0f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.2f, 0.2f, 0.2f);
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(1.25f, 0.775f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Rigby.Draw(lightingShader);
+
 
         //Control
         glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.1f, 0.1f, 0.1f);
