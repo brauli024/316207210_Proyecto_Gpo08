@@ -15,6 +15,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Model.h"
+#include "Texture.h"
 
 // GLM Mathemtics
 #include <glm/glm.hpp>
@@ -23,7 +24,7 @@
 
 
 // Properties
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 1000, HEIGHT = 600;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 // Function prototypes
@@ -44,29 +45,35 @@ GLfloat lastFrame = 0.0f;  	// Time of last frame
 
 // Light attributes
 glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-glm::vec3 SpotLightDir(2.5f, 0.0f, -2.5f);
-glm::vec3 SpotLightPos(2.5f, 0.0f, -2.5f);
+glm::vec3 SpotLightDir(0.0f, -1.0f, 0.0f);
+glm::vec3 SpotLightPos(-13.8f, 5.0f, 3.0f);
 
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    glm::vec3(-6.0f, 2.0f, 1.0f),
-    glm::vec3(0.0f, 1.6f, 4.35f)
+    //glm::vec3(-6.0f, 2.0f, 1.0f),
+    glm::vec3(-15.85f, 1.655f, 3.0f)
 };
 
+
 //Others
+//glm::vec3 Light1 = glm::vec3(0);
 glm::vec3 Light1 = glm::vec3(0);
-glm::vec3 Light2 = glm::vec3(0);
 glm::vec3 alfa1 = glm::vec3(1);
 glm::vec3 alfa2 = glm::vec3(1);
 glm::vec3 enciende_TV = glm::vec3(0);
 glm::vec3 apaga_TV = glm::vec3(1);
-float rot = 0.0f;
+float rot1 = 0.0f, rot2 = 0.0f, rot3 = 0.0f, rot4 = 0.0f;
 bool active;
 bool active2;
-bool anim = false;
+bool active3;
+bool anim1 = false;
 bool anim2 = false;
 bool anim3 = false;
+bool anim4 = false;
+bool anim5 = false;
+bool anim6 = false;
+bool anim7 = false;
 
 
 int main( )
@@ -81,7 +88,7 @@ int main( )
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );*/
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Practica 4", nullptr, nullptr );
+    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Proyecto Final", nullptr, nullptr );
     
     if ( nullptr == window )
     {
@@ -121,12 +128,13 @@ int main( )
     Shader shader( "Shaders/modelLoading.vs", "Shaders/modelLoading.frag" );
     Shader lightingShader("Shaders/lighting.vs", "Shaders/lighting.frag");
     Shader lampShader("Shaders/lamp.vs", "Shaders/lamp.frag");
+    Shader SkyBoxshader("Shaders/SkyBox.vs", "Shaders/SkyBox.frag");
     
-
-
 
     // Load models
 
+    Model Fachada((char*)"Models/Fachada/Fachada.obj");
+    Model Ventanas((char*)"Models/Fachada/Ventanas.obj");
     Model Control((char*)"Models/Control/Control.obj");
     Model Sofa((char*)"Models/Sofa/Sofa.obj");
     Model MesaConsola((char*)"Models/Mesa_Consola/Mesa.obj");
@@ -134,74 +142,141 @@ int main( )
     Model MesaTV((char*)"Models/Mesa_TV/Mesa.obj");
     Model TV_encendida((char*)"Models/TV/TV_Encendida.obj");
     Model TV_apagada((char*)"Models/TV/TV_apagada.obj");
-    Model Mordecai((char*)"Models/Mordecai/Mordecai.obj");
+    //Mordecai
+    Model MordecaiCuerpo((char*)"Models/Mordecai/Cuerpo.obj");
+    Model MordecaiBrazoIzq((char*)"Models/Mordecai/Brazo_Izq.obj");
+    Model MordecaiBrazoDer((char*)"Models/Mordecai/Brazo_Der.obj");
+    Model MordecaiPiernaIzq((char*)"Models/Mordecai/Pierna_Izq.obj");
+    Model MordecaiPicoAbajo((char*)"Models/Mordecai/Pico_Abajo.obj");
+    //Rigby
     Model Rigby((char*)"Models/Rigby/Rigby.obj");
+    //Benson
     Model BensonCuerpo((char*)"Models/Benson/Benson_Cuerpo.obj");
     Model BensonCabeza((char*)"Models/Benson/Benson_Cabeza.obj");
     Model BensonChicles((char*)"Models/Benson/Benson_Chicles.obj");
 
-
     
-    //GLfloat vertices[] =
-    //{
-    //    // positions          // colors           // texture coords
-    // 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-    // 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-    //-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-    //-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+    // Set up vertex data (and buffer(s)) and attribute pointers
+    GLfloat vertices[] =
+    {
+        // Positions            // Normals              // Texture Coords
+        -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,     0.0f,  0.0f,
+        0.5f, -0.5f, -0.5f,     0.0f,  0.0f, -1.0f,     1.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,     0.0f,  0.0f, -1.0f,     1.0f,  1.0f,
+        0.5f,  0.5f, -0.5f,     0.0f,  0.0f, -1.0f,     1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,     0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,     0.0f,  0.0f,
 
-    //};
+        -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,     0.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,     0.0f,  0.0f,  1.0f,     1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,     0.0f,  0.0f,  1.0f,     1.0f,  1.0f,
+        0.5f,  0.5f,  0.5f,     0.0f,  0.0f,  1.0f,  	1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,     0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,     0.0f,  0.0f,
 
-    float vertices[] = {
-     -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-       -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-       -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f,  0.5f,    -1.0f,  0.0f,  0.0f,    1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,    -1.0f,  0.0f,  0.0f,    1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,    -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,    -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,    -1.0f,  0.0f,  0.0f,    0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,    -1.0f,  0.0f,  0.0f,    1.0f,  0.0f,
 
-       -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-       -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-       -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        0.5f,  0.5f,  0.5f,     1.0f,  0.0f,  0.0f,     1.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,     1.0f,  0.0f,  0.0f,     1.0f,  1.0f,
+        0.5f, -0.5f, -0.5f,     1.0f,  0.0f,  0.0f,     0.0f,  1.0f,
+        0.5f, -0.5f, -0.5f,     1.0f,  0.0f,  0.0f,     0.0f,  1.0f,
+        0.5f, -0.5f,  0.5f,     1.0f,  0.0f,  0.0f,     0.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,     1.0f,  0.0f,  0.0f,     1.0f,  0.0f,
 
-       -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,     0.0f,  1.0f,
+        0.5f, -0.5f, -0.5f,     0.0f, -1.0f,  0.0f,     1.0f,  1.0f,
+        0.5f, -0.5f,  0.5f,     0.0f, -1.0f,  0.0f,     1.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,     0.0f, -1.0f,  0.0f,     1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,     0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,     0.0f,  1.0f,
 
-        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-       -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-       -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-       -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-       -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-       -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-       -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+        -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,     0.0f,  1.0f,
+        0.5f,  0.5f, -0.5f,     0.0f,  1.0f,  0.0f,     1.0f,  1.0f,
+        0.5f,  0.5f,  0.5f,     0.0f,  1.0f,  0.0f,     1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,     0.0f,  1.0f,  0.0f,     1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,     0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,     0.0f,  1.0f
     };
+
+
+    GLfloat skyboxVertices[] = {
+        // Positions
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        -1.0f,  1.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f
+    };
+
 
     GLuint indices[] =
     {  // Note that we start from 0!
-        0,1,3,
-        1,2,3
-
+        0,1,2,3,
+        4,5,6,7,
+        8,9,10,11,
+        12,13,14,15,
+        16,17,18,19,
+        20,21,22,23,
+        24,25,26,27,
+        28,29,30,31,
+        32,33,34,35
     };
+
+    // Positions all containers
+    glm::vec3 cubePositions[] = {
+        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f,  2.0f, -2.5f),
+        glm::vec3(1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
 
     // First, set the container's VAO (and VBO)
     GLuint VBO, VAO, EBO;
@@ -216,56 +291,57 @@ int main( )
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
-    // normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    // Normals attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
+    // Texture Coordinate attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(2);
+    glBindVertexArray(0);
 
-    //// Position attribute
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
-    //glEnableVertexAttribArray(0);
+    // Then, we set the light's VAO (VBO stays the same. After all, the vertices are the same for the light object (also a 3D cube))
+    GLuint lightVAO;
+    glGenVertexArrays(1, &lightVAO);
+    glBindVertexArray(lightVAO);
+    // We only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need.
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // Set the vertex attributes (only position data for the lamp))
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0); // Note that we skip over the other data in our buffer object (we don't need the normals/textures, only positions).
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
 
-    //// color attribute
-    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    //glEnableVertexAttribArray(1);
 
-    //// texture coord attribute
-    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    //glEnableVertexAttribArray(2);
+    //SkyBox
+    GLuint skyboxVBO, skyboxVAO;
+    glGenVertexArrays(1, &skyboxVAO);
+    glGenBuffers(1, &skyboxVBO);
+    glBindVertexArray(skyboxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+
 
     // Set texture units
     lightingShader.Use();
     glUniform1i(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 0);
     glUniform1i(glGetUniformLocation(lightingShader.Program, "material.specular"), 1);
 
-    // Load textures
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    int textureWidth, textureHeight, nrChannels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char* image;
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-  
-    /*image = stbi_load("images/Awesomeface.png", &textureWidth, &textureHeight, &nrChannels, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    if (image)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(image);*/
+
+    // Load textures 
+
+    vector<const GLchar*> faces;
+    faces.push_back("SkyBox/Fondo.tga");
+    faces.push_back("SkyBox/Fondo.tga");
+    faces.push_back("SkyBox/Fondo.tga");
+    faces.push_back("SkyBox/Fondo.tga");
+    faces.push_back("SkyBox/Fondo.tga");
+    faces.push_back("SkyBox/Fondo.tga");
+
+    GLuint cubemapTexture = TextureLoading::LoadCubemap(faces);
 
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
 
@@ -299,13 +375,13 @@ int main( )
 
 
         // Directional light
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), 0.0f, -1.0f, -1.0f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"), 0.5f, 0.5f, 0.5f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.5f, 0.5f, 0.5f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"), 0.5f, 0.5f, 0.5f);
 
 
-        // Point light Benson
+        // Point light TV
         glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].position"), pointLightPositions[0].x, pointLightPositions[0].y, pointLightPositions[0].z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].ambient"), Light1.x, Light1.y, Light1.z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].diffuse"), Light1.x, Light1.y, Light1.z);
@@ -313,15 +389,6 @@ int main( )
         glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].constant"), 1.0f);
         glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].linear"), 0.7f);
         glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 1.8f);
-
-        // Point light TV
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].position"), pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].ambient"), Light2.x, Light2.y, Light2.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].diffuse"), Light2.x, Light2.y, Light2.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].specular"), 0.05f, 0.05f, 0.05f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].linear"), 0.7f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].quadratic"), 1.8f);
 
         // SpotLight
         glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), SpotLightPos.x, SpotLightPos.y, SpotLightPos.z);
@@ -332,8 +399,8 @@ int main( )
         glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.constant"), 1.0f);
         glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.linear"), 0.35f);
         glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.quadratic"), 0.44f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.cutOff"), glm::cos(glm::radians(12.5f)));
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.outerCutOff"), glm::cos(glm::radians(15.0f)));
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.cutOff"), glm::cos(glm::radians(25.0f)));
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.outerCutOff"), glm::cos(glm::radians(34.0f)));
 
         // Set material properties
         glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 32.0f);
@@ -354,39 +421,49 @@ int main( )
         glm::mat4 model(1);
 
 
+        //Fachada
+        model = glm::mat4(1);
+        model = glm::scale(model, glm::vec3(1.2f, 1.0f, 1.2f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Fachada.Draw(lightingShader);
+
         //Sofa
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(-11.5f, 0.055f, 3.0f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Sofa.Draw(lightingShader);
 
         //Mesa Consola
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 2.3f));
+        model = glm::translate(model, glm::vec3(-13.8f, 0.055f, 3.0f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         MesaConsola.Draw(lightingShader);
 
         //Consola
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 0.652f, 2.5f));
-        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(-14.0f, 0.707f, 3.5f));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Consola.Draw(lightingShader);
 
         //Mesa TV
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
+        model = glm::translate(model, glm::vec3(-16.5f, 0.055f, 3.0f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         MesaTV.Draw(lightingShader);
 
         //TV Apagada
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 0.83f, 4.8f));
-        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(-16.3f, 0.885f, 3.0f));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::scale(model, glm::vec3(apaga_TV.x, apaga_TV.y, apaga_TV.z));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
@@ -394,8 +471,8 @@ int main( )
 
         //TV Encendida
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 0.83f, 4.8f));
-        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(-16.3f, 0.885f, 3.0f));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::scale(model, glm::vec3(enciende_TV.x, enciende_TV.y, enciende_TV.z));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
@@ -403,39 +480,64 @@ int main( )
 
         //Benson
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(-6.0f, 0.0f, 1.0f));
-        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(-12.0f, 0.055f, -3.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         BensonCuerpo.Draw(lightingShader);
 
         //Mordecai
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.1f, 0.1f, 0.1f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 1.0f, 1.0f, 1.0f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.2f, 0.2f, 0.2f);
+        //Cuerpo
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
+        model = glm::translate(model, glm::vec3(-12.0f, 0.055f, 3.0f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
-        Mordecai.Draw(lightingShader);
+        MordecaiCuerpo.Draw(lightingShader);
+        //BrazoIzq
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-12.018f, 2.151f, 3.104f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-rot1), glm::vec3(1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        MordecaiBrazoIzq.Draw(lightingShader);
+        //BrazoDer
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-12.016f, 2.154f, 2.898f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-rot2), glm::vec3(1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        MordecaiBrazoDer.Draw(lightingShader);
+        //PiernaIzq
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-12.0f, 1.204f, 3.086f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-rot3), glm::vec3(1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        MordecaiPiernaIzq.Draw(lightingShader);
+        //PicoAbajo
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-12.254f, 2.477f, 2.995f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-rot4), glm::vec3(1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        MordecaiPicoAbajo.Draw(lightingShader);
 
         //Rigby
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.1f, 0.1f, 0.1f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 1.0f, 1.0f, 1.0f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.2f, 0.2f, 0.2f);
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(1.25f, 0.775f, 0.0f));
+        model = glm::translate(model, glm::vec3(-11.5f, 0.83f, 4.25f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Rigby.Draw(lightingShader);
 
-
         //Control
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.1f, 0.1f, 0.1f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 1.0f, 1.0f, 1.0f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 1.0f, 1.0f, 1.0f);
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(0.0f, 0.66f, 1.8f));
+        model = glm::translate(model, glm::vec3(-13.3f, 0.715f, 3.0f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Control.Draw(lightingShader);
@@ -446,10 +548,17 @@ int main( )
         glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        //Ventanas
+        model = glm::mat4(1);
+        model = glm::scale(model, glm::vec3(1.2f, 1.0f, 1.2f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), 1, 1, 1, 0.8);
+        Ventanas.Draw(lightingShader);
+
         //Chicles Benson
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(-6.0f, 0.0f, 1.0f));
-        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(-12.0f, 0.055f, -3.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), alfa1.x, alfa1.y, alfa1.z, 1.0);
@@ -457,8 +566,7 @@ int main( )
 
         //Cabeza Benson
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(-6.0f, 0.0f, 1.0f));
-        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(-12.0f, 0.055f, -3.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), alfa2.x, alfa2.y, alfa2.z, 0.5);
@@ -468,8 +576,6 @@ int main( )
         glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), 1.0, 1.0, 1.0, 1.0);
         glBindVertexArray(0);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
 
 
         //------------------------------------------------LAMP SHADER------------------------------------------------
@@ -532,6 +638,24 @@ int main( )
 
         glBindVertexArray(0);
 
+
+        //------------------------------------------------SKYBOX SHADER------------------------------------------------
+
+        // Draw skybox as last
+        glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
+        SkyBoxshader.Use();
+        view = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation component of the view matrix
+        glUniformMatrix4fv(glGetUniformLocation(SkyBoxshader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(SkyBoxshader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+        // skybox cube
+        glBindVertexArray(skyboxVAO);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+        glDepthFunc(GL_LESS); // Set depth function back to default
+
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
@@ -569,27 +693,86 @@ void DoMovement( )
         camera.ProcessKeyboard( RIGHT, deltaTime );
     }
 
-    if (anim)
+    //Mover Mordecai
+
+    //BrazoIzq
+    if (anim1)
     {
-        if (rot < 15)
+        if (rot1 < 150)
         {
-            rot += 0.1f;
+            rot1 += 0.5f;
         }
         else
         {
-            anim3 = true;
+            anim2 = true;
+            anim1 = false;
         }
     }
 
     if (anim2)
     {
-        if (rot > 0)
+        if (rot1 > 135)
         {
-            rot -= 0.1f;
+            rot1 -= 0.5f;
         }
         else
         {
+            anim2 = false;
+            anim1 = true;
+        }
+    }
+
+    //BrazoDer
+    if (anim3)
+    {
+        if (rot2 < 120)
+        {
+            rot2 += 0.5f;
+        }
+        else
+        {
+            anim4 = true;
             anim3 = false;
+        }
+    }
+
+    if (anim4)
+    {
+        if (rot2 > 105)
+        {
+            rot2 -= 0.5f;
+        }
+        else
+        {
+            anim4 = false;
+            anim3 = true;
+        }
+    }
+
+    //PiernaIzq
+    if (anim5)
+    {
+        if (rot3 < 30)
+        {
+            rot3 += 0.5f;
+        }
+        else
+        {
+            anim6 = true;
+            anim5 = false;
+        }
+    }
+
+    if (anim6)
+    {
+        if (rot3 > 15)
+        {
+            rot3 -= 0.5f;
+        }
+        else
+        {
+            anim6 = false;
+            anim5 = true;
         }
     }
 
@@ -615,18 +798,40 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         }
     }
 
+    //Mover Mordecai
 
-    if (keys[GLFW_KEY_O] && anim3 == false)
+    if (keys[GLFW_KEY_O])
     {
-        anim = true;
-        anim2 = false;
+        rot1 = 135;
+        rot2 = 120;
+        rot3 = 15;
+        rot4 = -20;     //PicoAbajo
+        active3 = !active3;
+        if (active3)
+        {
+            anim1 = true;
+            anim2 = false;
+            anim3 = true;
+            anim4 = false;
+            anim5 = true;
+            anim6 = false;
+        }
+        else
+        {
+            anim1 = false;
+            anim2 = false;
+            anim3 = false;
+            anim4 = false;
+            anim5 = false;
+            anim6 = false;
+            rot1 = 0;
+            rot2 = 0;
+            rot3 = 0;
+            rot4 = 0;
+        }
     }
 
-    if (keys[GLFW_KEY_O] && anim3 == true)
-    {
-        anim2 = true;
-        anim = false;
-    }
+    //Encender y apagar TV
 
     if (keys[GLFW_KEY_P])
     {
@@ -635,13 +840,13 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         {
             enciende_TV = glm::vec3(1);
             apaga_TV = glm::vec3(0);
-            Light2 = glm::vec3(1);
+            Light1 = glm::vec3(1);
         }
         else
         {
             enciende_TV = glm::vec3(0);
             apaga_TV = glm::vec3(1);
-            Light2 = glm::vec3(0);
+            Light1 = glm::vec3(0);
         }
     }
 
@@ -652,13 +857,13 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         active = !active;
         if (active)
         {
-            Light1 = glm::vec3(1.0f, 0.0f, 0.0f);
+            //Light1 = glm::vec3(1.0f, 0.0f, 0.0f);
             alfa1 = glm::vec3(1.0f, 0.0f, 0.0f);
             alfa2 = glm::vec3(1.0f, 0.0f, 0.0f);
         }
         else
         {
-            Light1 = glm::vec3(0);
+            //Light1 = glm::vec3(0);
             alfa1 = glm::vec3(1);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
             alfa2 = glm::vec3(1);
         }
