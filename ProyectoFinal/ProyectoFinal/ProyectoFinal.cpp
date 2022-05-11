@@ -51,7 +51,6 @@ glm::vec3 SpotLightPos(-13.8f, 5.0f, 3.0f);
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    //glm::vec3(-6.0f, 2.0f, 1.0f),
     glm::vec3(-15.85f, 1.655f, 3.0f)
 };
 
@@ -63,10 +62,12 @@ glm::vec3 alfa1 = glm::vec3(1);
 glm::vec3 alfa2 = glm::vec3(1);
 glm::vec3 enciende_TV = glm::vec3(0);
 glm::vec3 apaga_TV = glm::vec3(1);
-float rot1 = 0.0f, rot2 = 0.0f, rot3 = 0.0f, rot4 = 0.0f;
+float rot1 = 0.0f, rot2 = 0.0f, rot3 = 0.0f, rot4 = 0.0f, rot5 = 0.0f;
+float trasX_1 = -11.5f, trasY_1 = 0.83f, trasZ_1 = 2.5f, trasY_2 = 0.660f;
 bool active;
 bool active2;
 bool active3;
+bool active4;
 bool anim1 = false;
 bool anim2 = false;
 bool anim3 = false;
@@ -74,6 +75,12 @@ bool anim4 = false;
 bool anim5 = false;
 bool anim6 = false;
 bool anim7 = false;
+bool anim8 = false;
+float V0_X1 = -1.0f;
+float V0_Z1 = 1.217f;
+float V0_Y1 = 4.13f;
+float V0_Y2 = 5.173f;
+float tiempo = 0.0f, tiempo2 = 0.0f;
 
 
 int main( )
@@ -117,7 +124,6 @@ int main( )
         std::cout << "Failed to initialize GLEW" << std::endl;
         return EXIT_FAILURE;
     }
-    
     // Define the viewport dimensions
     glViewport( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
     
@@ -139,6 +145,7 @@ int main( )
     Model Sofa((char*)"Models/Sofa/Sofa.obj");
     Model MesaConsola((char*)"Models/Mesa_Consola/Mesa.obj");
     Model Consola((char*)"Models/Consola/Consola.obj");
+    Model Cartucho((char*)"Models/Cartucho/Cartucho.obj");
     Model MesaTV((char*)"Models/Mesa_TV/Mesa.obj");
     Model TV_encendida((char*)"Models/TV/TV_Encendida.obj");
     Model TV_apagada((char*)"Models/TV/TV_apagada.obj");
@@ -452,6 +459,24 @@ int main( )
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Consola.Draw(lightingShader);
 
+        //Cartucho
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-14.047, trasY_2, trasZ_1));
+        //model = glm::translate(model, glm::vec3(-14.047f, 0.928f, 3.717f));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(rot5), glm::vec3(1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Cartucho.Draw(lightingShader);
+
+        //Control
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-13.3f, 0.715f, 3.0f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Control.Draw(lightingShader);
+
         //Mesa TV
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-16.5f, 0.055f, 3.0f));
@@ -528,19 +553,11 @@ int main( )
 
         //Rigby
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(-11.5f, 0.83f, 4.25f));
+        model = glm::translate(model, glm::vec3(trasX_1, trasY_1, 4.25f));
         model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Rigby.Draw(lightingShader);
-
-        //Control
-        model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(-13.3f, 0.715f, 3.0f));
-        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
-        Control.Draw(lightingShader);
 
 
 
@@ -776,6 +793,43 @@ void DoMovement( )
         }
     }
 
+    //Brinco Rigby
+
+    if (anim7)
+    {
+        if (tiempo < 1.0f)
+        {
+            tiempo += 0.05f;
+            trasX_1 = -11.5f + (V0_X1 * tiempo);
+            trasY_1 = 0.83f + (V0_Y1 * tiempo) - ((1.0f / 2.0f) * 9.81f * pow(tiempo, 2));
+        }
+        else
+        {
+            anim7 = false;
+        }
+    }
+
+    //Poner cartucho
+
+    if (anim8)
+    {
+        //model = glm::translate(model, glm::vec3(-14.047f, 0.928f, 3.717f));
+        if (tiempo2 < 1.0f)
+        {
+
+            if (rot5 < 90)
+            {
+                rot5 += 1.0f;
+            }
+            tiempo2 += 0.01f;
+            trasZ_1 = 2.5f + (V0_Z1 * tiempo2);
+            trasY_2 = 0.660f + (V0_Y2 * tiempo2) - ((1.0f / 2.0f) * 9.81f * pow(tiempo2, 2));
+        }
+        else
+        {
+            anim8 = false;
+        }
+    }
 }
 
 // Is called whenever a key is pressed/released via GLFW
@@ -827,7 +881,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
             rot1 = 0;
             rot2 = 0;
             rot3 = 0;
-            rot4 = 0;
+            rot4 = 0;       //PicoAbajo
         }
     }
 
@@ -852,20 +906,55 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
     //Benson enojado
 
-    if (keys[GLFW_KEY_SPACE])
+    if (keys[GLFW_KEY_M])
     {
         active = !active;
         if (active)
         {
-            //Light1 = glm::vec3(1.0f, 0.0f, 0.0f);
             alfa1 = glm::vec3(1.0f, 0.0f, 0.0f);
             alfa2 = glm::vec3(1.0f, 0.0f, 0.0f);
         }
         else
         {
-            //Light1 = glm::vec3(0);
             alfa1 = glm::vec3(1);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
             alfa2 = glm::vec3(1);
+        }
+    }
+
+    //Brinco Rigby
+
+    if (keys[GLFW_KEY_SPACE])
+    {
+        active3 = !active3;
+        if (active3)
+        {
+            anim7 = true;
+        }
+        else
+        {
+            anim7 = false;
+            trasX_1 = -11.5f;
+            trasY_1 = 0.83f;
+            tiempo = 0.0f;
+        }
+    }
+
+    //Poner cartucho
+
+    if (keys[GLFW_KEY_N])
+    {
+        active4 = !active4;
+        if (active4)
+        {
+            anim8 = true;
+        }
+        else
+        {
+            anim8 = false;
+            trasZ_1 = 2.5f;
+            trasY_2 = 0.660f;
+            tiempo2 = 0.0f;
+            rot5 = 0.0f;
         }
     }
 
