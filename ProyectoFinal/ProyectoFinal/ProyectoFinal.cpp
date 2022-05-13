@@ -131,7 +131,7 @@ int main( )
     glEnable( GL_DEPTH_TEST );
     
     // Setup and compile our shaders
-    Shader shader( "Shaders/modelLoading.vs", "Shaders/modelLoading.frag" );
+    Shader shader("Shaders/modelLoading.vs", "Shaders/modelLoading.frag");
     Shader lightingShader("Shaders/lighting.vs", "Shaders/lighting.frag");
     Shader lampShader("Shaders/lamp.vs", "Shaders/lamp.frag");
     Shader SkyBoxshader("Shaders/SkyBox.vs", "Shaders/SkyBox.frag");
@@ -462,16 +462,21 @@ int main( )
         //Cartucho
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-14.047, trasY_2, trasZ_1));
-        //model = glm::translate(model, glm::vec3(-14.047f, 0.928f, 3.717f));
         model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::rotate(model, glm::radians(rot5), glm::vec3(1.0f, 0.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Cartucho.Draw(lightingShader);
 
-        //Control
+        //Controles
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-13.3f, 0.715f, 3.0f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Control.Draw(lightingShader);
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(-13.3f, 0.715f, 4.0f));
         model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
@@ -565,14 +570,6 @@ int main( )
         glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        //Ventanas
-        model = glm::mat4(1);
-        model = glm::scale(model, glm::vec3(1.2f, 1.0f, 1.2f));
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
-        glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), 1, 1, 1, 0.8);
-        Ventanas.Draw(lightingShader);
-
         //Chicles Benson
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-12.0f, 0.055f, -3.0f));
@@ -589,10 +586,18 @@ int main( )
         glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), alfa2.x, alfa2.y, alfa2.z, 0.5);
         BensonCabeza.Draw(lightingShader);
 
+        //Ventanas
+        model = glm::mat4(1);
+        model = glm::scale(model, glm::vec3(1.2f, 1.0f, 1.2f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), 1, 1, 1, 0.8);
+        Ventanas.Draw(lightingShader);
+
         glDisable(GL_BLEND);   //Desactiva el canal alfa 
         glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), 1.0, 1.0, 1.0, 1.0);
+        
         glBindVertexArray(0);
-
 
 
         //------------------------------------------------LAMP SHADER------------------------------------------------
@@ -632,7 +637,7 @@ int main( )
         //glBindVertexArray(VAO);
         //glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        glBindVertexArray(0);
+        //glBindVertexArray(0);
 
 
         //------------------------------------------------MODEL SHADER------------------------------------------------
@@ -643,17 +648,10 @@ int main( )
         //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-        //// Draw the loaded model
-
-        ////Control
-        //model = glm::mat4(1);
-        //model = glm::translate(model, glm::vec3(10.0f, 0.0f, 0.0f));
-        ////model = glm::rotate(model, glm::radians(-rot), glm::vec3(1.0f, 0.0f, 0.0f));
-        //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        //Control.Draw(shader);
+        // Draw the loaded model
 
 
-        glBindVertexArray(0);
+        //glBindVertexArray(0);
 
 
         //------------------------------------------------SKYBOX SHADER------------------------------------------------
@@ -710,7 +708,7 @@ void DoMovement( )
         camera.ProcessKeyboard( RIGHT, deltaTime );
     }
 
-    //Mover Mordecai
+    //------------------Mover Mordecai------------------
 
     //BrazoIzq
     if (anim1)
@@ -793,7 +791,7 @@ void DoMovement( )
         }
     }
 
-    //Brinco Rigby
+    //------------------Brinco Rigby------------------
 
     if (anim7)
     {
@@ -809,7 +807,7 @@ void DoMovement( )
         }
     }
 
-    //Poner cartucho
+    //------------------Poner cartucho------------------
 
     if (anim8)
     {
@@ -852,7 +850,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         }
     }
 
-    //Mover Mordecai
+    //------------------Mover Mordecai------------------
 
     if (keys[GLFW_KEY_O])
     {
@@ -881,11 +879,11 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
             rot1 = 0;
             rot2 = 0;
             rot3 = 0;
-            rot4 = 0;       //PicoAbajo
+            rot4 = 0;
         }
     }
 
-    //Encender y apagar TV
+    //------------------Encender y apagar TV------------------
 
     if (keys[GLFW_KEY_P])
     {
@@ -904,7 +902,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         }
     }
 
-    //Benson enojado
+    //------------------Benson enojado------------------
 
     if (keys[GLFW_KEY_M])
     {
@@ -921,7 +919,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         }
     }
 
-    //Brinco Rigby
+    //------------------Brinco Rigby------------------
 
     if (keys[GLFW_KEY_SPACE])
     {
@@ -939,7 +937,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         }
     }
 
-    //Poner cartucho
+    //------------------Poner cartucho------------------
 
     if (keys[GLFW_KEY_N])
     {
@@ -977,4 +975,3 @@ void MouseCallback( GLFWwindow *window, double xPos, double yPos )
     
     camera.ProcessMouseMovement( xOffset, yOffset );
 }
-

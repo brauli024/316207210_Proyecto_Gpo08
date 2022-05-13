@@ -29,6 +29,7 @@
     <None Include="Shaders\SkyBox.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="stb_image.h" />

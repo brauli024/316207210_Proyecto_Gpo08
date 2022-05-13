@@ -1,12 +1,12 @@
 ﻿  ProyectoFinal.cpp
 C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(359,30): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(573,93): warning C4305: 'argumento': truncamiento de 'double' a 'GLfloat'
-C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(804,48): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(826,50): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(967,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(968,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(972,21): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(973,21): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(975,13): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(976,13): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(594,93): warning C4305: 'argumento': truncamiento de 'double' a 'GLfloat'
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(802,48): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(824,50): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(965,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(966,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(970,21): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(971,21): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(973,13): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(974,13): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
   ProyectoFinal.vcxproj -> C:\Users\bayo1\OneDrive\Escritorio\Repositorio\316207210_Proyecto_Gpo08\ProyectoFinal\Debug\ProyectoFinal.exe
