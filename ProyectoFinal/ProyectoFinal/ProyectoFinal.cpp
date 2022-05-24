@@ -51,36 +51,66 @@ glm::vec3 SpotLightPos(-13.8f, 5.0f, 3.0f);
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    glm::vec3(-15.85f, 1.655f, 3.0f)
+    glm::vec3(-15.85f, 1.655f, 3.0f),
+    glm::vec3(17.25f, 10.2f, -3.8f)
 };
 
 
 //Others
-//glm::vec3 Light1 = glm::vec3(0);
-glm::vec3 Light1 = glm::vec3(0);
-glm::vec3 alfa1 = glm::vec3(1);
-glm::vec3 alfa2 = glm::vec3(1);
-glm::vec3 enciende_TV = glm::vec3(0);
-glm::vec3 apaga_TV = glm::vec3(1);
-float rot1 = 0.0f, rot2 = 0.0f, rot3 = 0.0f, rot4 = 0.0f, rot5 = 0.0f;
-float trasX_1 = -11.5f, trasY_1 = 0.83f, trasZ_1 = 2.5f, trasY_2 = 0.660f;
-bool active;
-bool active2;
-bool active3;
-bool active4;
-bool anim1 = false;
-bool anim2 = false;
-bool anim3 = false;
-bool anim4 = false;
-bool anim5 = false;
-bool anim6 = false;
+
+glm::vec3 Light1 = glm::vec3(0);    //Apagar PointLight de TV
+glm::vec3 alfa1 = glm::vec3(1);     //Canal alfa para los chicles de la cabeza de Benson
+glm::vec3 alfa2 = glm::vec3(1);     //Canal alfa para la cabeza de Benson
+glm::vec3 enciende_TV = glm::vec3(0);   //Inicializa el escalamiento de la TV encendida en 0
+glm::vec3 apaga_TV = glm::vec3(1);      //Inicializa el escalamiento de la TV apagada en 1
+
+//Variables para activar y desactivar animaciones
+bool active1;   //Para activar y desactivar animación simple 1 (encender y apagar TV)
+bool active2;   //Para activar y desactivar animación simple 2 (Benson enojado)
+bool active3;   //Para activar y desactivar animación simple 3 (Mordecai feliz)
+bool active4;   //Para activar y desactivar animación compleja 1 (brinco Rigby)
+bool active5;   //Para activar y desactivar animación compleja 2 (poner cartucho)
+
+//Variables para automatizar animaciones
+//Mover brazo izquierdo de Mordecai
+bool anim1 = false;     //Mover hasta límite superior
+bool anim2 = false;     //Mover hasta límite inferior
+float rot1 = 0.0f;      //Rotación del brazo
+//Mover brazo derecho de Mordecai
+bool anim3 = false;     //Mover hasta límite superior
+bool anim4 = false;     //Mover hasta límite inferior
+float rot2 = 0.0f;      //Rotación del brazo
+//Mover pierna izquierda de Mordecai
+bool anim5 = false;     //Mover hasta límite superior
+bool anim6 = false;     //Mover hasta límite inferior
+float rot3 = 0.0f;      //Rotación de la pierna
+//Mover pico de Mordecai
+float rot4 = 0.0f;      //Rotación del pico
+//Salto Rigby
 bool anim7 = false;
+//Poner cartucho
 bool anim8 = false;
-float V0_X1 = -1.0f;
-float V0_Z1 = 1.217f;
-float V0_Y1 = 4.13f;
-float V0_Y2 = 5.173f;
-float tiempo = 0.0f, tiempo2 = 0.0f;
+float rot5 = 0.0f;      //Rotación del cartucho
+
+//Iicialización de variables con las posiciones veritcal y horizontal iniciales para animaciones de tiro parabólico
+//Rigby
+float trasX_1 = -11.5f;     //Posición horizontal inicial
+float trasY_1 = 0.83f;      //Posición vertical inicial
+//Cartucho
+float trasZ_1 = 2.5f;       //Posición horizontal inicial
+float trasY_2 = 0.660f;     //Posición vertical inicial
+
+//Velocidades horizontales y verticales para animaciones de tiro parabólico
+//Rigby
+float V0_X1 = -1.0f;    //Velocidad horizontal
+float V0_Y1 = 4.13f;    //Velocidad vertical
+//Cartucho
+float V0_Z1 = 1.217f;   //Velocidad horizontal
+float V0_Y2 = 5.173f;   //Velocidad vertical
+
+//Variables de tiempo para animaciones de tiro parabólico
+float tiempo = 0.0f;    //Rigby
+float tiempo2 = 0.0f;   //Cartucho
 
 
 int main( )
@@ -139,8 +169,17 @@ int main( )
 
     // Load models
 
+    //-------------------------Fachada-------------------------
     Model Fachada((char*)"Models/Fachada/Fachada.obj");
+    //-------------------------Ventanas-------------------------
     Model Ventanas((char*)"Models/Fachada/Ventanas.obj");
+    //-------------------------Cuarto de Mordecai y Rigby-------------------------
+    Model Cama((char*)"Models/Cama/Cama.obj");
+    Model Buro((char*)"Models/Buro/Buro.obj");
+    Model Cajonera((char*)"Models/Cajonera/Cajonera.obj");
+    Model Lampara((char*)"Models/Lampara/Lampara.obj");
+    Model Trampolin((char*)"Models/Trampolin/Trampolin.obj");
+    //-------------------------Sala-------------------------
     Model Control((char*)"Models/Control/Control.obj");
     Model Sofa((char*)"Models/Sofa/Sofa.obj");
     Model MesaConsola((char*)"Models/Mesa_Consola/Mesa.obj");
@@ -397,6 +436,15 @@ int main( )
         glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].linear"), 0.7f);
         glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 1.8f);
 
+        // Point light Lámpara
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].position"), pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].ambient"), 0.3f, 0.3f, 0.3f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].diffuse"), 0.3f, 0.3f, 0.3f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].specular"), 0.1f, 0.1f, 0.1f);
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].constant"), 1.0f);
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].linear"), 0.045f);
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].quadratic"), 0.0075f);
+
         // SpotLight
         glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), SpotLightPos.x, SpotLightPos.y, SpotLightPos.z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.direction"), SpotLightDir.x, SpotLightDir.y, SpotLightDir.z);
@@ -428,13 +476,57 @@ int main( )
         glm::mat4 model(1);
 
 
-        //Fachada
+        //--------------------------Fachada--------------------------
         model = glm::mat4(1);
         model = glm::scale(model, glm::vec3(1.2f, 1.0f, 1.2f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Fachada.Draw(lightingShader);
 
+        //--------------------------Cuarto de Mordecai y Rigby--------------------------
+        //Cama
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(15.0f, 8.255f, -6.8f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Cama.Draw(lightingShader);
+        
+        //Buró
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(17.15f, 8.255f, -4.0f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Buro.Draw(lightingShader);
+ 
+        //Lámpara
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(17.25f, 9.505f, -3.8f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Lampara.Draw(lightingShader);
+        
+        //Cajonera azul
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(12.5f, 8.255f, 1.9f));
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Cajonera.Draw(lightingShader);
+        
+        //Trampolín
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(14.0f, 8.255f, -1.1f));
+        model = glm::rotate(model, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        Trampolin.Draw(lightingShader);
+
+
+        //--------------------------Sala--------------------------
         //Sofa
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-11.5f, 0.055f, 3.0f));
@@ -509,6 +601,7 @@ int main( )
         TV_encendida.Draw(lightingShader);
 
         //Benson
+        //Cuerpo
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-12.0f, 0.055f, -3.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -603,41 +696,41 @@ int main( )
         //------------------------------------------------LAMP SHADER------------------------------------------------
 
 
-        //// Also draw the lamp object, again binding the appropriate shader
-        //lampShader.Use();
-        //// Get location objects for the matrices on the lamp shader (these could be different on a different shader)
-        //modelLoc = glGetUniformLocation(lampShader.Program, "model");
-        //viewLoc = glGetUniformLocation(lampShader.Program, "view");
-        //projLoc = glGetUniformLocation(lampShader.Program, "projection");
+        /*// Also draw the lamp object, again binding the appropriate shader
+        lampShader.Use();
+        // Get location objects for the matrices on the lamp shader (these could be different on a different shader)
+        modelLoc = glGetUniformLocation(lampShader.Program, "model");
+        viewLoc = glGetUniformLocation(lampShader.Program, "view");
+        projLoc = glGetUniformLocation(lampShader.Program, "projection");
 
-        //// Set matrices
-        //glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        //glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        // Set matrices
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 
-        //model = glm::mat4(1);
-        //model = glm::translate(model, lightPos);
-        //model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        //// Draw the light object (using light's vertex attributes)
-        //for (GLuint i = 0; i < 2; i++)
-        //{
-        //    model = glm::mat4(1);
-        //    model = glm::translate(model, pointLightPositions[i]);
-        //    model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-        //    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        //    glBindVertexArray(VAO);
-        //    glDrawArrays(GL_TRIANGLES, 0, 36);
-        //}
+        model = glm::mat4(1);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        // Draw the light object (using light's vertex attributes)
+        for (GLuint i = 0; i < 2; i++)
+        {
+            model = glm::mat4(1);
+            model = glm::translate(model, pointLightPositions[i]);
+            model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
-        //model = glm::mat4(1);
-        //model = glm::translate(model, SpotLightPos);
-        //model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        //glBindVertexArray(VAO);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        model = glm::mat4(1);
+        model = glm::translate(model, SpotLightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        //glBindVertexArray(0);
+        glBindVertexArray(0);*/
 
 
         //------------------------------------------------MODEL SHADER------------------------------------------------
@@ -798,8 +891,10 @@ void DoMovement( )
         if (tiempo < 1.0f)
         {
             tiempo += 0.05f;
+            //Ecuación de movimiento horizontal:
             trasX_1 = -11.5f + (V0_X1 * tiempo);
-            trasY_1 = 0.83f + (V0_Y1 * tiempo) - ((1.0f / 2.0f) * 9.81f * pow(tiempo, 2));
+            //Ecuación de movimiento vertical:  
+            trasY_1 = 0.83f + (V0_Y1 * tiempo) - ((1.0f / 2.0f) * 9.81f * pow(tiempo, 2));      
         }
         else
         {
@@ -820,7 +915,9 @@ void DoMovement( )
                 rot5 += 1.0f;
             }
             tiempo2 += 0.01f;
+            //Ecuación de movimiento horizontal:
             trasZ_1 = 2.5f + (V0_Z1 * tiempo2);
+            //Ecuación de movimiento vertical:
             trasY_2 = 0.660f + (V0_Y2 * tiempo2) - ((1.0f / 2.0f) * 9.81f * pow(tiempo2, 2));
         }
         else
@@ -847,6 +944,42 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         else if (action == GLFW_RELEASE)
         {
             keys[key] = false;
+        }
+    }
+
+    //------------------Encender y apagar TV------------------
+
+    if (keys[GLFW_KEY_P])
+    {
+        active1 = !active1;
+        if (active1)
+        {
+            enciende_TV = glm::vec3(1);
+            apaga_TV = glm::vec3(0);
+            Light1 = glm::vec3(1);
+        }
+        else
+        {
+            enciende_TV = glm::vec3(0);
+            apaga_TV = glm::vec3(1);
+            Light1 = glm::vec3(0);
+        }
+    }
+
+    //------------------Benson enojado------------------
+
+    if (keys[GLFW_KEY_M])
+    {
+        active2 = !active2;
+        if (active2)
+        {
+            alfa1 = glm::vec3(1.0f, 0.0f, 0.0f);
+            alfa2 = glm::vec3(1.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            alfa1 = glm::vec3(1);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
+            alfa2 = glm::vec3(1);
         }
     }
 
@@ -883,48 +1016,12 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         }
     }
 
-    //------------------Encender y apagar TV------------------
-
-    if (keys[GLFW_KEY_P])
-    {
-        active2 = !active2;
-        if (active2)
-        {
-            enciende_TV = glm::vec3(1);
-            apaga_TV = glm::vec3(0);
-            Light1 = glm::vec3(1);
-        }
-        else
-        {
-            enciende_TV = glm::vec3(0);
-            apaga_TV = glm::vec3(1);
-            Light1 = glm::vec3(0);
-        }
-    }
-
-    //------------------Benson enojado------------------
-
-    if (keys[GLFW_KEY_M])
-    {
-        active = !active;
-        if (active)
-        {
-            alfa1 = glm::vec3(1.0f, 0.0f, 0.0f);
-            alfa2 = glm::vec3(1.0f, 0.0f, 0.0f);
-        }
-        else
-        {
-            alfa1 = glm::vec3(1);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
-            alfa2 = glm::vec3(1);
-        }
-    }
-
     //------------------Brinco Rigby------------------
 
     if (keys[GLFW_KEY_SPACE])
     {
-        active3 = !active3;
-        if (active3)
+        active4 = !active4;
+        if (active4)
         {
             anim7 = true;
         }
@@ -941,8 +1038,8 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
     if (keys[GLFW_KEY_N])
     {
-        active4 = !active4;
-        if (active4)
+        active5 = !active5;
+        if (active5)
         {
             anim8 = true;
         }
