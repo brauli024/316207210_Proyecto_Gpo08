@@ -46,23 +46,23 @@ GLfloat lastFrame = 0.0f;  	// Time of last frame
 // Light attributes
 glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
 glm::vec3 SpotLightDir(0.0f, -1.0f, 0.0f);
-glm::vec3 SpotLightPos(-13.8f, 5.0f, 3.0f);
+glm::vec3 SpotLightPos(-13.8f, 5.0f, 3.0f);     //Spotlight posicionada en la sala
 
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    glm::vec3(-15.85f, 1.655f, 3.0f),
-    glm::vec3(17.25f, 10.2f, -3.8f)
+    glm::vec3(-15.85f, 1.655f, 3.0f),   //Pointlight TV
+    glm::vec3(17.25f, 10.2f, -3.8f)     //Pointlight lámpara
 };
 
 
-//Others
+//--------------------------------Variables para animaciones--------------------------------
 
 glm::vec3 Light1 = glm::vec3(0);    //Apagar PointLight de TV
-glm::vec3 alfa1 = glm::vec3(1);     //Canal alfa para los chicles de la cabeza de Benson
-glm::vec3 alfa2 = glm::vec3(1);     //Canal alfa para la cabeza de Benson
 glm::vec3 enciende_TV = glm::vec3(0);   //Inicializa el escalamiento de la TV encendida en 0
 glm::vec3 apaga_TV = glm::vec3(1);      //Inicializa el escalamiento de la TV apagada en 1
+glm::vec3 alfa1 = glm::vec3(1);     //Canal alfa para los chicles de la cabeza de Benson
+glm::vec3 alfa2 = glm::vec3(1);     //Canal alfa para la cabeza de Benson
 
 //Variables para activar y desactivar animaciones
 bool active1;   //Para activar y desactivar animación simple 1 (encender y apagar TV)
@@ -75,15 +75,15 @@ bool active5;   //Para activar y desactivar animación compleja 2 (poner cartucho
 //Mover brazo izquierdo de Mordecai
 bool anim1 = false;     //Mover hasta límite superior
 bool anim2 = false;     //Mover hasta límite inferior
-float rot1 = 0.0f;      //Rotación del brazo
+float rot1 = 0.0f;      //Rotación del brazo izquierdo
 //Mover brazo derecho de Mordecai
 bool anim3 = false;     //Mover hasta límite superior
 bool anim4 = false;     //Mover hasta límite inferior
-float rot2 = 0.0f;      //Rotación del brazo
+float rot2 = 0.0f;      //Rotación del brazo derecho
 //Mover pierna izquierda de Mordecai
 bool anim5 = false;     //Mover hasta límite superior
 bool anim6 = false;     //Mover hasta límite inferior
-float rot3 = 0.0f;      //Rotación de la pierna
+float rot3 = 0.0f;      //Rotación de la pierna izquierda
 //Mover pico de Mordecai
 float rot4 = 0.0f;      //Rotación del pico
 //Salto Rigby
@@ -94,11 +94,11 @@ float rot5 = 0.0f;      //Rotación del cartucho
 
 //Iicialización de variables con las posiciones veritcal y horizontal iniciales para animaciones de tiro parabólico
 //Rigby
-float trasX_1 = -11.5f;     //Posición horizontal inicial
-float trasY_1 = 0.83f;      //Posición vertical inicial
+float trasX_1 = -11.5f;     //Inicializar posición horizontal
+float trasY_1 = 0.83f;      //Inicializar posición vertical
 //Cartucho
-float trasZ_1 = 2.5f;       //Posición horizontal inicial
-float trasY_2 = 0.660f;     //Posición vertical inicial
+float trasZ_1 = 2.5f;       //Inicializar posición horizontal
+float trasY_2 = 0.660f;     //Inicializar posición vertical
 
 //Velocidades horizontales y verticales para animaciones de tiro parabólico
 //Rigby
@@ -553,9 +553,9 @@ int main( )
 
         //Cartucho
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(-14.047, trasY_2, trasZ_1));
+        model = glm::translate(model, glm::vec3(-14.047, trasY_2, trasZ_1));  //Traslación con animación de tiro parabólico.
         model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(rot5), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(rot5), glm::vec3(1.0f, 0.0f, 0.0f));    //Rotación para animación de cartucho.
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         Cartucho.Draw(lightingShader);
@@ -586,7 +586,7 @@ int main( )
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-16.3f, 0.885f, 3.0f));
         model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(apaga_TV.x, apaga_TV.y, apaga_TV.z));
+        model = glm::scale(model, glm::vec3(apaga_TV.x, apaga_TV.y, apaga_TV.z));   //Esacalamiento para animación de TV.
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         TV_apagada.Draw(lightingShader);
@@ -595,7 +595,7 @@ int main( )
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-16.3f, 0.885f, 3.0f));
         model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(enciende_TV.x, enciende_TV.y, enciende_TV.z));
+        model = glm::scale(model, glm::vec3(enciende_TV.x, enciende_TV.y, enciende_TV.z));  //Esacalamiento para animación de TV.
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         TV_encendida.Draw(lightingShader);
@@ -620,7 +620,7 @@ int main( )
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-12.018f, 2.151f, 3.104f));
         model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-rot1), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-rot1), glm::vec3(1.0f, 0.0f, 0.0f));   //Rotación para animación de brazo de Mordecai
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         MordecaiBrazoIzq.Draw(lightingShader);
@@ -628,7 +628,7 @@ int main( )
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-12.016f, 2.154f, 2.898f));
         model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-rot2), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-rot2), glm::vec3(1.0f, 0.0f, 0.0f));   //Rotación para animación de brazo de Mordecai
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         MordecaiBrazoDer.Draw(lightingShader);
@@ -636,22 +636,22 @@ int main( )
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-12.0f, 1.204f, 3.086f));
         model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-rot3), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-rot3), glm::vec3(1.0f, 0.0f, 0.0f));   //Rotación para animación de pierna de Mordecai
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         MordecaiPiernaIzq.Draw(lightingShader);
-        //PicoAbajo
+        //Pico
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-12.254f, 2.477f, 2.995f));
         model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-rot4), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-rot4), glm::vec3(1.0f, 0.0f, 0.0f));   //Rotación para animación de pico de Mordecai
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
         MordecaiPicoAbajo.Draw(lightingShader);
 
         //Rigby
         model = glm::mat4(1);
-        model = glm::translate(model, glm::vec3(trasX_1, trasY_1, 4.25f));
+        model = glm::translate(model, glm::vec3(trasX_1, trasY_1, 4.25f));      //Traslación para animación de tiro parabólico
         model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
@@ -668,7 +668,8 @@ int main( )
         model = glm::translate(model, glm::vec3(-12.0f, 0.055f, -3.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
-        glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), alfa1.x, alfa1.y, alfa1.z, 1.0);
+        //Parámetros de color alfa de chicles para animación de Benson:
+        glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), alfa1.x, alfa1.y, alfa1.z, 1.0);    
         BensonChicles.Draw(lightingShader);
 
         //Cabeza Benson
@@ -676,6 +677,7 @@ int main( )
         model = glm::translate(model, glm::vec3(-12.0f, 0.055f, -3.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
+        //Parámetros de color alfa de la cabeza para animación de Benson:
         glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), alfa2.x, alfa2.y, alfa2.z, 0.5);
         BensonCabeza.Draw(lightingShader);
 
@@ -806,11 +808,11 @@ void DoMovement( )
     //BrazoIzq
     if (anim1)
     {
-        if (rot1 < 150)
+        if (rot1 < 150)     //Mover brazo hasta llegar al límite superior
         {
             rot1 += 0.5f;
         }
-        else
+        else                //Al llegar al límite se debe mover el brazo en sentido contrario
         {
             anim2 = true;
             anim1 = false;
@@ -819,11 +821,11 @@ void DoMovement( )
 
     if (anim2)
     {
-        if (rot1 > 135)
+        if (rot1 > 135)     //Mover brazo hasta llegar al límite inferior
         {
             rot1 -= 0.5f;
         }
-        else
+        else                //Al llegar al límite se debe mover el brazo en sentido contrario
         {
             anim2 = false;
             anim1 = true;
@@ -833,11 +835,11 @@ void DoMovement( )
     //BrazoDer
     if (anim3)
     {
-        if (rot2 < 120)
+        if (rot2 < 120)     //Mover brazo hasta llegar al límite superior
         {
             rot2 += 0.5f;
         }
-        else
+        else                //Al llegar al límite se debe mover el brazo en sentido contrario
         {
             anim4 = true;
             anim3 = false;
@@ -846,11 +848,11 @@ void DoMovement( )
 
     if (anim4)
     {
-        if (rot2 > 105)
+        if (rot2 > 105)     //Mover brazo hasta llegar al límite inferior
         {
             rot2 -= 0.5f;
         }
-        else
+        else                //Al llegar al límite se debe mover el brazo en sentido contrario
         {
             anim4 = false;
             anim3 = true;
@@ -860,11 +862,11 @@ void DoMovement( )
     //PiernaIzq
     if (anim5)
     {
-        if (rot3 < 30)
+        if (rot3 < 30)      //Mover pierna hasta llegar al límite superior
         {
             rot3 += 0.5f;
         }
-        else
+        else                //Al llegar al límite se debe mover la pierna en sentido contrario
         {
             anim6 = true;
             anim5 = false;
@@ -873,11 +875,11 @@ void DoMovement( )
 
     if (anim6)
     {
-        if (rot3 > 15)
+        if (rot3 > 15)      //Mover pierna hasta llegar al límite inferior
         {
             rot3 -= 0.5f;
         }
-        else
+        else                //Al llegar al límite se debe mover la pierna en sentido contrario
         {
             anim6 = false;
             anim5 = true;
@@ -888,7 +890,7 @@ void DoMovement( )
 
     if (anim7)
     {
-        if (tiempo < 1.0f)
+        if (tiempo < 1.0f)      //Se realiza la animación hasta un tiempo de 1 segundo (aprox)
         {
             tiempo += 0.05f;
             //Ecuación de movimiento horizontal:
@@ -896,7 +898,7 @@ void DoMovement( )
             //Ecuación de movimiento vertical:  
             trasY_1 = 0.83f + (V0_Y1 * tiempo) - ((1.0f / 2.0f) * 9.81f * pow(tiempo, 2));      
         }
-        else
+        else                    //Se detiene la animación
         {
             anim7 = false;
         }
@@ -906,11 +908,10 @@ void DoMovement( )
 
     if (anim8)
     {
-        //model = glm::translate(model, glm::vec3(-14.047f, 0.928f, 3.717f));
-        if (tiempo2 < 1.0f)
+        if (tiempo2 < 1.0f)     //Se realiza la animación hasta un tiempo de 1 segundo (aprox)
         {
 
-            if (rot5 < 90)
+            if (rot5 < 90)      //Se realiza el giro de 90° del cartucho
             {
                 rot5 += 1.0f;
             }
@@ -920,7 +921,7 @@ void DoMovement( )
             //Ecuación de movimiento vertical:
             trasY_2 = 0.660f + (V0_Y2 * tiempo2) - ((1.0f / 2.0f) * 9.81f * pow(tiempo2, 2));
         }
-        else
+        else                    //Se detiene la animación
         {
             anim8 = false;
         }
@@ -952,17 +953,17 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     if (keys[GLFW_KEY_P])
     {
         active1 = !active1;
-        if (active1)
+        if (active1)    //Se enciende la TV
         {
-            enciende_TV = glm::vec3(1);
-            apaga_TV = glm::vec3(0);
-            Light1 = glm::vec3(1);
+            enciende_TV = glm::vec3(1);     //Escala el modelo de la TV encendida en 1
+            apaga_TV = glm::vec3(0);        //Escala el modelo de la TV apagada en 0
+            Light1 = glm::vec3(1);          //Activa la pointlight de la TV cuando se enciende
         }
-        else
+        else            //Se apaga la TV
         {
-            enciende_TV = glm::vec3(0);
-            apaga_TV = glm::vec3(1);
-            Light1 = glm::vec3(0);
+            enciende_TV = glm::vec3(0);     //Escala el modelo de la TV encendida en 0
+            apaga_TV = glm::vec3(1);        //Escala el modelo de la TV apagada en 1
+            Light1 = glm::vec3(0);          //Desactiva la pointlight de la TV cuando se apaga
         }
     }
 
@@ -971,15 +972,15 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     if (keys[GLFW_KEY_M])
     {
         active2 = !active2;
-        if (active2)
+        if (active2)    //Se cambia el color de los modelos
         {
-            alfa1 = glm::vec3(1.0f, 0.0f, 0.0f);
-            alfa2 = glm::vec3(1.0f, 0.0f, 0.0f);
+            alfa1 = glm::vec3(1.0f, 0.0f, 0.0f);        //Se cambia el color de los chicles de Benson a rojo
+            alfa2 = glm::vec3(1.0f, 0.0f, 0.0f);        //Se cambia el color de la cabeza de Benson a rojo
         }
-        else
+        else            //Se regresa el color original de los modelos
         {
-            alfa1 = glm::vec3(1);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
-            alfa2 = glm::vec3(1);
+            alfa1 = glm::vec3(1);                   //Se regresa el color de los chicles de Benson al original
+            alfa2 = glm::vec3(1);                   //Se regresa el color de la cabeza de Benson al original
         }
     }
 
@@ -987,28 +988,30 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
     if (keys[GLFW_KEY_O])
     {
-        rot1 = 135;
-        rot2 = 120;
-        rot3 = 15;
-        rot4 = -20;     //PicoAbajo
+        rot1 = 135;     //Inicializa la posición del brazo izquierdo
+        rot2 = 120;     //Inicializa la posición del brazo derecho
+        rot3 = 15;      //Inicializa la posición de la pierna izquierda
+        rot4 = -20;     //Cambia la posición del pico para que se vea abierto
         active3 = !active3;
-        if (active3)
+        if (active3)    //Se inicia el movimiento de las partes del cuerpo
         {
-            anim1 = true;
-            anim2 = false;
-            anim3 = true;
-            anim4 = false;
-            anim5 = true;
-            anim6 = false;
+            anim1 = true;   //Se activa el movimiento con el límite superior del brazo izquierdo
+            anim2 = false;  //Se desactiva el movimiento con el límite inferior del brazo izquierdo
+            anim3 = true;   //Se activa el movimiento con el límite superior del brazo derecho
+            anim4 = false;  //Se desactiva el movimiento con el límite inferior del brazo derecho
+            anim5 = true;   //Se activa el movimiento con el límite superior de la pierna izquierda
+            anim6 = false;  //Se desactiva el movimiento con el límite inferior de la pierna izquierda
         }
-        else
+        else            //Se detiene el movimiento de las partes del cuerpo
         {
+            //Se desactivan todos los movimientos
             anim1 = false;
             anim2 = false;
             anim3 = false;
             anim4 = false;
             anim5 = false;
             anim6 = false;
+            //Se regresa a la posición inicial todas las partes del cuerpo
             rot1 = 0;
             rot2 = 0;
             rot3 = 0;
@@ -1023,11 +1026,12 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         active4 = !active4;
         if (active4)
         {
-            anim7 = true;
+            anim7 = true;       //Se activa el movimiento
         }
         else
         {
-            anim7 = false;
+            anim7 = false;      //Se desaciva el movimiento
+            //Se reinicializan las variables pertinentes al tiro parabólico para poner a Rigby en su posción inicial
             trasX_1 = -11.5f;
             trasY_1 = 0.83f;
             tiempo = 0.0f;
@@ -1041,11 +1045,12 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         active5 = !active5;
         if (active5)
         {
-            anim8 = true;
+            anim8 = true;       //Se activa el movimiento
         }
         else
         {
-            anim8 = false;
+            anim8 = false;      //Se desaciva el movimiento
+            //Se reinicializan las variables necesarias para poner al cartucho en su posción inicial nuevamente
             trasZ_1 = 2.5f;
             trasY_2 = 0.660f;
             tiempo2 = 0.0f;
